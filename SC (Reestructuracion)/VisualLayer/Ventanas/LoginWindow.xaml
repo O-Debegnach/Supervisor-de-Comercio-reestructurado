@@ -1,0 +1,148 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VisualLayer.Ventanas"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:Drag="clr-namespace:DragHelper" xmlns:System="clr-namespace:System;assembly=mscorlib" x:Name="loginWindow"
+        x:Class="VisualLayer.Ventanas.LoginWindow"
+        mc:Ignorable="d"
+        
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"        
+        BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"        
+        Title="Login" Height="500" Width="350" 
+        ResizeMode="NoResize" 
+        WindowStartupLocation="CenterScreen" 
+        WindowStyle="None">
+    <Grid>
+        <Rectangle Height="280" VerticalAlignment="Top" Drag:EnableDragHelper.EnableDrag="True">
+            <Rectangle.Fill>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FFFA7D09"/>
+                    <GradientStop Color="#FFF9A934" Offset="1"/>
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+
+        <Image Width="100" Height="100" VerticalAlignment="Top" Margin="30" Source="/VisualLayer;component/Resources/Archivos/Imagenes/home.png" Drag:EnableDragHelper.EnableDrag="True"/>
+
+        <Grid x:Name="gdLogin" d:IsHidden="False">
+            <Rectangle Width="280" Height="240" VerticalAlignment="Bottom" Margin="0,80" RadiusY="10" RadiusX="10" Fill="White">
+                <Rectangle.Effect>
+                    <DropShadowEffect BlurRadius="15" Direction="0" RenderingBias="Quality" ShadowDepth="1" Color="#FFBBBBBB"/>
+                </Rectangle.Effect>
+            </Rectangle>
+            <Grid VerticalAlignment="Bottom" Margin="35,80" Height="240">
+                <Label Content="LOGIN" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="5" Foreground="Gray" FontSize="18"/>
+                <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Usuario o contraseña incorrecta" VerticalAlignment="Top" Margin="0,40,0,0"
+                           Foreground="Red" Visibility="Collapsed" x:Name="lblError"/>
+                <StackPanel VerticalAlignment="Center" Margin="15">
+                    <DockPanel>
+                        <materialDesign:PackIcon Kind="Account" Width="20" Height="20" VerticalAlignment="Stretch" Margin="0,13,5,0" Foreground="{Binding BorderBrush, ElementName=boxUsuario}" />
+                        <TextBox x:Name="boxUsuario" Margin="0,10" materialDesign:HintAssist.Hint="USUARIO" Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                             FontFamily="Champagne &amp; Limousines" FontSize="18">
+                            <Binding Path="UserName" ElementName="loginWindow" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <domain1:NotEmptyValidationRule
+                                        xmlns:domain1="clr-namespace:VisualLayer.Resources.Classes.ValidationRules" ValidationStep="RawProposedValue" FieldName="usuario"/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox>
+                    </DockPanel>
+                    <DockPanel>
+                        <materialDesign:PackIcon Kind="Key" Width="20" Height="20" VerticalAlignment="Stretch" Margin="0,11,5,0" Foreground="{Binding BorderBrush, ElementName=boxContraseña, Mode=OneWay}" />
+                        <PasswordBox x:Name="boxContraseña" Margin="0,10" materialDesign:HintAssist.Hint="CONTRASEÑA" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"
+                                 FontFamily="Champagne &amp; Limousines" FontSize="18"/>
+                    </DockPanel>
+                </StackPanel>
+            </Grid>
+
+            <Button Width="150" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,65" Content="LOGIN" Click="LoginButton_Click" IsDefault="True"/>
+            <Label x:Name="LabelRegistro" Content="REGISTRAR NUEVO USUARIO" Padding="0" Style="{DynamicResource LabelButton}" Visibility="{Binding Visibility, ElementName=gdLogin}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="35" Cursor="Hand" MouseDown="LabelButtons_MouseDown"/>
+            <Label x:Name="LabelOlvidoContraseña" Content="¿OLVIDÓ SU CONTRASEÑA?" Padding="0" Style="{DynamicResource LabelButton}" Visibility="{Binding Visibility, ElementName=gdLogin}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="15" Cursor="Hand" MouseDown="LabelButtons_MouseDown"/>
+        </Grid>
+
+        <Grid x:Name="gdRegistro" Visibility="Collapsed">
+            <Rectangle Width="280" Drag:EnableDragHelper.EnableDrag="True" Height="280" VerticalAlignment="Bottom" Margin="35,0,35,65" RadiusY="10" RadiusX="10" Fill="White">
+                <Rectangle.Effect>
+                    <DropShadowEffect BlurRadius="15" Direction="0" RenderingBias="Quality" ShadowDepth="1" Color="#FFBBBBBB"/>
+                </Rectangle.Effect>
+            </Rectangle>
+
+            <Grid VerticalAlignment="Bottom" Margin="35,0,35,65" Height="267">
+                <Label Content="REGISTRO" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="96,-7,96,0" Foreground="Gray" FontSize="18"/>
+                <StackPanel VerticalAlignment="Center" Margin="15,9,15,14" Height="244">
+                    <DockPanel Margin="0,10">
+                        <materialDesign:PackIcon Kind="Account" Foreground="{Binding BorderBrush, ElementName=boxUserReg}" Width="20" Height="20" VerticalAlignment="Stretch" Margin="0,13,5,0"/>
+                        <TextBox x:Name="boxUserReg" Margin="0" materialDesign:HintAssist.Hint="USUARIO" Style="{StaticResource MaterialDesignFloatingHintTextBox}" FontFamily="Champagne &amp; Limousines" FontSize="18">
+                            <Binding Path="UserName" ElementName="loginWindow" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <domain1:NotEmptyValidationRule
+                                        xmlns:domain1="clr-namespace:VisualLayer.Resources.Classes.ValidationRules" ValidationStep="RawProposedValue" FieldName="usuario"/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox>
+                    </DockPanel>
+                    <DockPanel Margin="0,10">
+                        <materialDesign:PackIcon Kind="Key" Foreground="{Binding BorderBrush, ElementName=regPassword}" Width="20" Height="20" VerticalAlignment="Stretch" Margin="0,8,5,0"/>
+                        <PasswordBox Margin="0" x:Name="regPassword" materialDesign:HintAssist.Hint="CONTRASEÑA" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" FontFamily="Champagne &amp; Limousines" FontSize="18"/>
+                    </DockPanel>
+                    <DockPanel Margin="0,10">
+                        <materialDesign:PackIcon Kind="Key" Foreground="{Binding BorderBrush, ElementName=regConfirmPassword}" Width="20" Height="20" VerticalAlignment="Stretch" Margin="0,8,5,0"/>
+                        <PasswordBox Margin="0" x:Name="regConfirmPassword" materialDesign:HintAssist.Hint="CONFIRMAR CONTRASEÑA" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" FontFamily="Champagne &amp; Limousines" FontSize="18"/>
+                    </DockPanel>
+                    <CheckBox x:Name="adminCheckBox" Content="¿ES ADMINISTRADOR?" FontSize="15" Margin="10" IsChecked="{Binding IsAdmin, ElementName=loginWindow, Mode=TwoWay}"/>
+                </StackPanel>
+            </Grid>
+
+            <Button Width="150" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="48" Content="Registrarse" Click="SignInButton_Click" IsDefault="True"/>
+            <Label x:Name="LabelIngresoExistente" Content="INGRESAR CON USUARIO EXISTENTE" Padding="0" Style="{DynamicResource LabelButton}" Visibility="{Binding Visibility, ElementName=gdRegistro}" Margin="20" VerticalAlignment="Bottom" HorizontalAlignment="Center" MouseDown="LabelButtons_MouseDown"/>
+        </Grid>
+
+        <Grid x:Name="gdPassword" Visibility="Collapsed">
+            <Rectangle Width="280" Drag:EnableDragHelper.EnableDrag="True" Height="267" VerticalAlignment="Bottom" Margin="35,0,35,65" RadiusY="10" RadiusX="10" Fill="White">
+                <Rectangle.Effect>
+                    <DropShadowEffect BlurRadius="15" Direction="0" RenderingBias="Quality" ShadowDepth="1" Color="#FFBBBBBB"/>
+                </Rectangle.Effect>
+            </Rectangle>
+            <materialDesign:DialogHost x:Name="DHCambioContraseña" CloseOnClickAway="True">
+                <Grid>
+                    <Grid VerticalAlignment="Bottom" Margin="35,0,35,65" Height="267">
+                        <Label Content="CAMBIO DE CONTRASEÑA" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="5" Foreground="Gray" FontSize="18"/>
+                        <StackPanel VerticalAlignment="Center" Margin="15,32,15,10" Height="244">
+                            <DockPanel Margin="0,10">
+                                <materialDesign:PackIcon Kind="Account" Foreground="{Binding BorderBrush, ElementName=boxUserCP}" Width="20" Height="20" VerticalAlignment="Stretch" Margin="0,13,5,0"/>
+                                <TextBox x:Name="boxUserCP" Margin="0" materialDesign:HintAssist.Hint="USUARIO" Style="{StaticResource MaterialDesignFloatingHintTextBox}" FontFamily="Champagne &amp; Limousines" FontSize="18">
+                                    <Binding Path="UserName" ElementName="loginWindow" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <domain1:NotEmptyValidationRule
+                                        xmlns:domain1="clr-namespace:VisualLayer.Resources.Classes.ValidationRules" ValidationStep="RawProposedValue" FieldName="usuario"/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox>
+                            </DockPanel>
+                            <DockPanel Margin="0,10">
+                                <materialDesign:PackIcon Kind="Key" Foreground="{Binding BorderBrush, ElementName=boxCP}" Width="20" Height="20" VerticalAlignment="Stretch" Margin="0,8,5,0"/>
+                                <PasswordBox x:Name="boxCP" Margin="0" materialDesign:HintAssist.Hint="NUEVA CONTRASEÑA" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" FontFamily="Champagne &amp; Limousines" FontSize="18"/>
+                            </DockPanel>
+                            <DockPanel Margin="0,10">
+                                <materialDesign:PackIcon Kind="Key" Foreground="{Binding BorderBrush, ElementName=boxCCP}" Width="20" Height="20" VerticalAlignment="Stretch" Margin="0,8,5,0"/>
+                                <PasswordBox x:Name="boxCCP" Margin="0" materialDesign:HintAssist.Hint="CONFIRMAR CONTRASEÑA" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" FontFamily="Champagne &amp; Limousines" FontSize="18"/>
+                            </DockPanel>
+                        </StackPanel>
+                    </Grid>
+                    <Button Width="170" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="80,0,80,55" Content="Cambiar contraseña" Click="CambiarContraseña_Click" IsDefault="True" Height="30"/>
+                    <Label x:Name="LabelVolver" Content="VOLVER" Padding="0" Style="{DynamicResource LabelButton}" Margin="20" VerticalAlignment="Bottom" HorizontalAlignment="Center" MouseDown="LabelButtons_MouseDown"/>
+                </Grid>
+            </materialDesign:DialogHost>
+        </Grid>
+
+    </Grid>
+</Window>

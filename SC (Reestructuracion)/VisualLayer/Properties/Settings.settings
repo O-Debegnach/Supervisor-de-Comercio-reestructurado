@@ -1,0 +1,42 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="VisualLayer.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="NombreTicketera" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="TiempoAutoSave" Type="System.UInt32" Scope="User">
+      <Value Profile="(Default)">60</Value>
+    </Setting>
+    <Setting Name="RutaBase" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="SavesPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">\bin</Value>
+    </Setting>
+    <Setting Name="BackupPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">\backups</Value>
+    </Setting>
+    <Setting Name="StockFile" Type="System.String" Scope="User">
+      <Value Profile="(Default)">\stock.dat</Value>
+    </Setting>
+    <Setting Name="UsersFile" Type="System.String" Scope="User">
+      <Value Profile="(Default)">\users.dat</Value>
+    </Setting>
+    <Setting Name="FullSavePath" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="FullBackupPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="RegistroVentasPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">\Registros</Value>
+    </Setting>
+    <Setting Name="RegistroVentasCompleto" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="IDVenta" Type="System.UInt64" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

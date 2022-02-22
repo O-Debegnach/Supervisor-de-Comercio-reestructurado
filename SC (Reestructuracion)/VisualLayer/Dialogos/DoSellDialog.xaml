@@ -1,0 +1,126 @@
+﻿<UserControl x:Class="VisualLayer.Dialogos.DoSellDialog" x:Name="Dialogo"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:glob="clr-namespace:System.Globalization;assembly=mscorlib"
+             xmlns:Conversores="clr-namespace:VisualLayer.Conversores" 
+             mc:Ignorable="d" 
+             d:DesignHeight="211.5" Height="Auto" d:DesignWidth="323">
+    <UserControl.Resources>
+        <Conversores:NoNullToBoolConverter x:Key="NoNullToBoolConverter"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <Conversores:MathMultipleConverter x:Key="SubtractConverter" Operation="Subtract"/>
+        <Conversores:MathMultipleConverter x:Key="AddConverter" Operation="AddPercentage"/>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="108"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
+            <RowDefinition/>
+            <RowDefinition Height="43"/>
+        </Grid.RowDefinitions>
+
+        <Label Content="Finalizar venta" FontSize="18" FontWeight="DemiBold"
+               HorizontalAlignment="Center" VerticalAlignment="Stretch"
+               VerticalContentAlignment="Center" Grid.ColumnSpan="2"/>
+        <ListBox x:Name="lbTiposDePago" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="1" Width="88">
+            <ListBoxItem x:Name="ItemEffectivo">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Money" VerticalAlignment="Center"/>
+                    <Label Content="Efectivo" VerticalContentAlignment="Center"/>
+                </StackPanel>
+            </ListBoxItem>
+            <ListBoxItem x:Name="ItemDebito">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="CreditCardOutline" VerticalAlignment="Center"/>
+                    <Label Content="Debito" VerticalContentAlignment="Center"/>
+                </StackPanel>
+            </ListBoxItem>
+            <ListBoxItem x:Name="ItemCredito">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="CreditCardOutline" VerticalAlignment="Center"/>
+                    <Label Content="Credito" VerticalContentAlignment="Center"/>
+                </StackPanel>
+            </ListBoxItem>
+        </ListBox>
+        <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="Cancelar" Margin="10 0 10 0" Width="{Binding ActualWidth, ElementName=btFinalizarVenta, Mode=OneWay}"
+                Command="materialDesign:DialogHost.CloseDialogCommand" IsCancel="True">
+                <Button.CommandParameter>
+                    <system:Boolean xmlns:system="clr-namespace:System;assembly=mscorlib">
+                        False
+                    </system:Boolean>
+                </Button.CommandParameter>
+            </Button>
+            <Button x:Name="btFinalizarVenta" Content="Finalizar venta"
+                HorizontalAlignment="Center" VerticalAlignment="Center" 
+                IsEnabled="{Binding SelectedItem, Converter={StaticResource NoNullToBoolConverter}, ElementName=lbTiposDePago}" Click="btFinalizarVenta_Click"/>
+        </StackPanel>
+
+        <Grid x:Name="gdEfectivo" Grid.Column="1" Margin="10" Grid.Row="1" Visibility="{Binding IsSelected, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=ItemEffectivo}">
+            <TextBlock Text="{Binding SubTotal, ElementName=Dialogo, StringFormat=Total: \{0:C\}}"
+                       HorizontalAlignment="Stretch" Margin="0,10,0,0" VerticalAlignment="Top"
+                       Padding="4 0"/>
+            <DockPanel VerticalAlignment="Center">
+                <Label Content="Paga con: " VerticalContentAlignment="Center" Padding="4 0"/>
+                <TextBox x:Name="txtPagaCon" HorizontalAlignment="Stretch" VerticalAlignment="Bottom"/>
+            </DockPanel>
+            <TextBlock VerticalAlignment="Bottom" FontWeight="DemiBold" HorizontalAlignment="Stretch" Padding="4 0">
+                <TextBlock.Text>
+                    <MultiBinding Converter="{StaticResource SubtractConverter}" StringFormat="Vuelto: {0:$0.00}">
+                        <Binding Path="Text" ElementName="txtPagaCon"/>
+                        <Binding Path="SubTotal" ElementName="Dialogo"/>
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+        </Grid>
+        <Grid x:Name="gdDebito" Grid.Column="1" Margin="10" Grid.Row="1" Visibility="{Binding IsSelected, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=ItemDebito}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="{Binding SubTotal, ElementName=Dialogo, StringFormat=Subotal: \{0:C\}}"
+                       HorizontalAlignment="Stretch" Margin="0,10,0,0" VerticalAlignment="Top"
+                       Padding="4 0"/>
+            <DockPanel VerticalAlignment="Center" Grid.ColumnSpan="2">
+                <Label Content="Tarjeta: " VerticalContentAlignment="Center" Padding="4 0"/>
+                <ComboBox Name="cbRecargoDebito"
+                          ItemsSource="{Binding RecargosDebito,ElementName=Dialogo, UpdateSourceTrigger=PropertyChanged}"
+                          HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                          IsEditable="False" DisplayMemberPath="Key" SelectedIndex="0"/>
+            </DockPanel>
+            <TextBlock VerticalAlignment="Bottom" Padding="4 0"
+                   Text="{Binding SelectedItem.Value, ElementName=cbRecargoDebito, StringFormat=Recargo: \{0\}%}"/>
+            <TextBlock x:Name="lblTotalDebito" FontWeight="DemiBold" VerticalAlignment="Bottom" Padding="4 0" Grid.Column="1">
+                <TextBlock.Text>
+                    <MultiBinding Converter="{StaticResource AddConverter}" StringFormat="Total: {0:C}">
+                        <Binding Path="SubTotal" ElementName="Dialogo"/>
+                        <Binding Path="SelectedItem.Value" ElementName="cbRecargoDebito"/>
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+        </Grid>
+        <Grid x:Name="gdCredito" Grid.Column="1" Margin="10" Grid.Row="1" Visibility="{Binding IsSelected, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=ItemCredito}" >
+            <DockPanel LastChildFill="True" VerticalAlignment="Top" Margin="0 10">
+                <Label Content="Tarjeta: "/>
+                <ComboBox ItemsSource="{Binding TarjetasCredito,ElementName=Dialogo, UpdateSourceTrigger=PropertyChanged}"
+                          Name="cbTarjetasCredito" DisplayMemberPath="Nombre" SelectedIndex="0"
+                          IsEditable="False" SelectionChanged="ComboBoxVentas_SelectionChanged"/>
+            </DockPanel>
+
+            <DockPanel LastChildFill="True" VerticalAlignment="Center">
+                <TextBlock Text="Coutas: " Padding="4 4 2 0"/>
+                <ComboBox Name="cbCuotasCredito" ItemsSource="{Binding MensajesCuotas, ElementName=Dialogo, UpdateSourceTrigger=PropertyChanged}"
+                          SelectionChanged="ComboBoxVentas_SelectionChanged" SelectedIndex="0"/>
+            </DockPanel>
+
+            <TextBlock VerticalAlignment="Bottom" Padding="4 0" FontWeight="DemiBold"
+                       Text="{Binding Total,ElementName=Dialogo, UpdateSourceTrigger=PropertyChanged, StringFormat=Total: \{0:$0.00\}}"/>
+        </Grid>
+    </Grid>
+</UserControl>
